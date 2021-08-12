@@ -14,7 +14,7 @@ class AddressBook(tk.Tk):
     self.columnconfigure(0,weight=1)
     self.rowconfigure(0,weight=1)
 
-    # Create SQLite3 Database & DB File
+    # Create SQLite3 Database & Contacts SQLite3 Table
     database.create_table()
 
     # Create Container Frame
@@ -53,7 +53,7 @@ class Entry(ttk.Frame):
 
     # Button Widgets
     clear_button = ttk.Button(self,text='Clear',command=self.clear_entry_fields)
-    add_button = ttk.Button(self,text='Add',command=self.print_entry)
+    add_button = ttk.Button(self,text='Add',command=self.add_database_entry)
 
     clear_button.grid(row=3,column=0,columnspan=1,sticky='EW')
     add_button.grid(row=3,column=1,columnspan=1,sticky='EW')
@@ -64,8 +64,10 @@ class Entry(ttk.Frame):
     self.phone_number_entry.delete(0,'end')
     self.relationship_entry.delete(0,'end')
 
-  def print_entry(self):
+  def add_database_entry(self):
     print(self.name.get(),self.phone_number.get(),self.relationship.get())
+    database.add_entry(self.name.get(),self.phone_number.get(),self.relationship.get())
+    self.clear_entry_fields()
 
 ############################# Python Code #######################
 

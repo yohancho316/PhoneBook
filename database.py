@@ -4,6 +4,10 @@ import sqlite3
 ###################### Stored SQL Queries ######################
 CREATE_TABLE_QUERY = 'CREATE TABLE IF NOT EXISTS contacts(name TEXT,phone_number TEXT, relationship TEXT);'
 
+INSERT_ENTRY_QUERY = "INSERT INTO contacts(name,phone_number,relationship) VALUES(?,?,?);"
+
+SELECT_ALL_ROWS_QUERY = 'SELECT * FROM contacts''
+
 ####################### Python Code ########################
 
 # Create the Database & SQLite3 Database File
@@ -13,23 +17,24 @@ connection = sqlite3.connect('address_book.db')
 connection.row_factory = sqlite3.Row
 
 def create_table():
-  connection.execute(CREATE_TABLE_QUERY)
-
-def add_entry(name,phone_number,age):
   with connection:
-    connection.execute('INSERT INTO users VALUES(?,?,?);',(name,phone_number,age))
+    connection.execute(CREATE_TABLE_QUERY)
+    connection.commit()
 
-def get_entries():
-  # Method 1
-  # cursor = connection.cursor()
-  # cursor.execute('SELECT * FROM entries;')
-  cursor = connection.execute('SELECT * FROM users;')
-  # cursor.fetchone() # Fetch the first row and move the cursor to the next row
-  return cursor.fetchall() # Fetches all of the results from the cursor and puts them in a list.
+def add_entry(name,phone_number,relationship):
+  with connection:
+    connection.execute(INSERT_ENTRY_QUERY,(name,phone_number,relationship))
+    connection.commit()
 
+def retrieve_contacts():
+  with connection:
+    cursor = connection.cursor()
+    cursor.execute(SELECT_ALL_ROWS_QUERY)
+    return cursor.fetchall()
 
 def close_connection():
-  connection.close()
+  with connection:
+    connection.close()
 
 
 

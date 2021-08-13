@@ -6,7 +6,7 @@ CREATE_TABLE_QUERY = 'CREATE TABLE IF NOT EXISTS contacts(name TEXT,phone_number
 
 INSERT_ENTRY_QUERY = "INSERT INTO contacts(name,phone_number,relationship) VALUES(?,?,?);"
 
-SELECT_ALL_ROWS_QUERY = 'SELECT * FROM contacts''
+SELECT_ALL_ROWS_QUERY = 'SELECT DISTINCT * FROM contacts ORDER BY name;'
 
 ####################### Python Code ########################
 
@@ -34,7 +34,7 @@ def retrieve_contacts():
 
 def close_connection():
   with connection:
-    connection.close()
+    connection.close
 
 
 

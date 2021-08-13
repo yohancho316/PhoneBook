@@ -68,6 +68,12 @@ class Entry(ttk.Frame):
     print(self.name.get(),self.phone_number.get(),self.relationship.get())
     database.add_entry(self.name.get(),self.phone_number.get(),self.relationship.get())
     self.clear_entry_fields()
+    self.display_records()
+
+  def display_records(self):
+    records = database.retrieve_contacts()
+    for row in records:
+      print(f"{row['name']}, {row['phone_number']}, {row['relationship']}")
 
 ############################# Python Code #######################
 

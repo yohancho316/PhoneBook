@@ -22,11 +22,17 @@ class AddressBook(tk.Tk):
     container.grid()
 
     # Create Entry Frame
-    entry_frame = Entry(container)
-    entry_frame.grid(row=0,column=0,sticky='W')
+    # entry_frame = Entry(container)
+    # entry_frame.grid(row=0,column=0,sticky='WE')
+
+    # Create Records Frame
+    record_frame = Records(container)
+    record_frame.grid(row=0,column=0,sticky='WE')
 
 # Entry Frame Class
 class Entry(ttk.Frame):
+
+  # Class Constructor Method
   def __init__(self,parent):
     super().__init__(parent)
     self.name = tk.StringVar()
@@ -74,6 +80,44 @@ class Entry(ttk.Frame):
     records = database.retrieve_contacts()
     for row in records:
       print(f"{row['name']}, {row['phone_number']}, {row['relationship']}")
+
+# Records Frame Class
+class Records(ttk.Frame):
+
+  # Class Constructor Method
+  def __init__(tree,parent):
+    super().__init__(parent)
+
+    # TTK Treeview Widget
+    tree = ttk.Treeview(tree)
+
+    # Define Columns
+    # NOTE: Creates Phantom Column
+    tree['columns'] = ('Name','Phone Number','Relationship')
+
+    # Format Columns
+    tree.column('#0',width=0,minwidth=0)
+    tree.column('Name',anchor='w',width=120)
+    tree.column('Phone Number',anchor='center',width=120)
+    tree.column('Relationship',anchor='w',width=120)
+
+    # Create Headings
+    tree.heading('#0',text='',anchor='w')
+    tree.heading('Name',text='Name',anchor='w')
+    tree.heading('Phone Number',text='Phone Number',anchor='center')
+    tree.heading('Relationship',text='Relationship',anchor='center')
+
+    # Retrieve Phone Records
+    records = database.retrieve_contacts()
+
+    # Populate Records in Treeview Widget
+    x = 0
+    for row in records:
+      tree.insert(parent='',index='end',iid=x,text='',values=(row['name'],row['phone_number'],row['relationship']))
+      x += 1
+    tree.grid()
+
+
 
 ############################# Python Code #######################
 

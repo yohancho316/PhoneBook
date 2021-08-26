@@ -10,9 +10,12 @@ class AddressBook(tk.Tk):
     super().__init__()
     self.title("John's Phone Address Book")
     self.resizable(True,True)
-    #self.geometry('400x400')
     self.columnconfigure(0,weight=1)
     self.rowconfigure(0,weight=1)
+
+    # Implement TK Styling Theme
+    style = ttk.Style(self)
+    style.theme_use('alt')
 
     # Create SQLite3 Database & Contacts SQLite3 Table
     database.create_table()
@@ -69,9 +72,9 @@ class Entry(ttk.Frame):
     self.relationship_entry.grid(row=2,column=1,sticky='W')
 
     # Button Widgets
-    clear_button = ttk.Button(self,text='Clear',command=self.clear_entry_fields)
-    add_button = ttk.Button(self,text='Add',command=self.add_database_entry)
-    show_records_button = ttk.Button(self,text='Show Records',command=show_record)
+    clear_button = ttk.Button(self,text='Clear',command=self.clear_entry_fields,cursor='hand2')
+    add_button = ttk.Button(self,text='Add',command=self.add_database_entry,cursor='hand2')
+    show_records_button = ttk.Button(self,text='Show Records',command=show_record,cursor='hand2')
 
     clear_button.grid(row=3,column=0,columnspan=1,sticky='EW')
     add_button.grid(row=3,column=1,columnspan=1,sticky='EW')
@@ -130,7 +133,7 @@ class Records(ttk.Frame):
     tree.grid()
 
     # Button Widgets
-    change_entry = ttk.Button(self,text='Change to Entry',command=show_entry)
+    change_entry = ttk.Button(self,text='Change to Entry',command=show_entry,cursor='hand2')
     change_entry.grid()
 
 ############################# Python Code #######################

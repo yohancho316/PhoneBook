@@ -10,7 +10,7 @@ class AddressBook(tk.Tk):
     super().__init__()
     self.title("John's Phone Address Book")
     self.resizable(True,True)
-    self.geometry('400x400')
+    #self.geometry('400x400')
     self.columnconfigure(0,weight=1)
     self.rowconfigure(0,weight=1)
 
@@ -21,19 +21,30 @@ class AddressBook(tk.Tk):
     container = ttk.Frame(self)
     container.grid()
 
+    # Create Frames Dictionary for Switching Views
+    self.frames = dict()
+
     # Create Entry Frame
-    # entry_frame = Entry(container)
-    # entry_frame.grid(row=0,column=0,sticky='WE')
+    entry_frame = Entry(container,self,lambda:self.show_frame(Records))
+    entry_frame.grid(row=0,column=0,sticky='NSWE')
 
     # Create Records Frame
-    record_frame = Records(container)
-    record_frame.grid(row=0,column=0,sticky='WE')
+    record_frame = Records(container,self,lambda:self.show_frame(Entry))
+    record_frame.grid(row=0,column=0,sticky='NSWE')
+
+    self.frames[Entry] = entry_frame
+    self.frames[Records] = record_frame
+
+    self.show_frame(Entry)
+
+  def show_frame(self,container):
+    frame = self.frames[container]
+    frame.tkraise()
 
 # Entry Frame Class
 class Entry(ttk.Frame):
-
   # Class Constructor Method
-  def __init__(self,parent):
+  def __init__(self,parent,controller,show_record):
     super().__init__(parent)
     self.name = tk.StringVar()
     self.phone_number = tk.StringVar()
@@ -60,9 +71,11 @@ class Entry(ttk.Frame):
     # Button Widgets
     clear_button = ttk.Button(self,text='Clear',command=self.clear_entry_fields)
     add_button = ttk.Button(self,text='Add',command=self.add_database_entry)
+    show_records_button = ttk.Button(self,text='Show Records',command=show_record)
 
     clear_button.grid(row=3,column=0,columnspan=1,sticky='EW')
     add_button.grid(row=3,column=1,columnspan=1,sticky='EW')
+    show_records_button.grid(row=4,column=0,columnspan=2,sticky='EW')
 
   # Clear Entry Fields
   def clear_entry_fields(self):
@@ -83,16 +96,15 @@ class Entry(ttk.Frame):
 
 # Records Frame Class
 class Records(ttk.Frame):
-
   # Class Constructor Method
-  def __init__(tree,parent):
+  def __init__(self,parent,controller,show_entry):
     super().__init__(parent)
 
     # TTK Treeview Widget
-    tree = ttk.Treeview(tree)
+    tree = ttk.Treeview(self)
 
     # Define Columns
-    # NOTE: Creates Phantom Column
+    # Creates Phantom Column
     tree['columns'] = ('Name','Phone Number','Relationship')
 
     # Format Columns
@@ -117,7 +129,9 @@ class Records(ttk.Frame):
       x += 1
     tree.grid()
 
-
+    # Button Widgets
+    change_entry = ttk.Button(self,text='Change to Entry',command=show_entry)
+    change_entry.grid()
 
 ############################# Python Code #######################
 

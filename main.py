@@ -104,37 +104,58 @@ class Records(ttk.Frame):
     super().__init__(parent)
 
     # TTK Treeview Widget
-    tree = ttk.Treeview(self)
+    self.tree = ttk.Treeview(self)
 
     # Define Columns
     # Creates Phantom Column
-    tree['columns'] = ('Name','Phone Number','Relationship')
+    self.tree['columns'] = ('Name','Phone Number','Relationship')
 
     # Format Columns
-    tree.column('#0',width=0,minwidth=0)
-    tree.column('Name',anchor='w',width=120)
-    tree.column('Phone Number',anchor='center',width=120)
-    tree.column('Relationship',anchor='w',width=120)
+    self.tree.column('#0',width=0,minwidth=0)
+    self.tree.column('Name',anchor='w',width=120)
+    self.tree.column('Phone Number',anchor='center',width=120)
+    self.tree.column('Relationship',anchor='w',width=120)
 
     # Create Headings
-    tree.heading('#0',text='',anchor='w')
-    tree.heading('Name',text='Name',anchor='w')
-    tree.heading('Phone Number',text='Phone Number',anchor='center')
-    tree.heading('Relationship',text='Relationship',anchor='center')
+    self.tree.heading('#0',text='',anchor='w')
+    self.tree.heading('Name',text='Name',anchor='w')
+    self.tree.heading('Phone Number',text='Phone Number',anchor='center')
+    self.tree.heading('Relationship',text='Relationship',anchor='center')
+
+    self.count = 0
 
     # Retrieve Phone Records
     records = database.retrieve_contacts()
 
     # Populate Records in Treeview Widget
-    x = 0
     for row in records:
-      tree.insert(parent='',index='end',iid=x,text='',values=(row['name'],row['phone_number'],row['relationship']))
-      x += 1
-    tree.grid()
+      self.tree.insert(parent='',index='end',iid=self.count,text='',values=(row['name'],row['phone_number'],row['relationship']))
+      self.count += 1
+    self.tree.grid()
 
     # Button Widgets
+    refresh_table = ttk.Button(self,text='Refresh Records',command=self.update_table,cursor='hand2')
     change_entry = ttk.Button(self,text='Change to Entry',command=show_entry,cursor='hand2')
+    refresh_table.grid()
     change_entry.grid()
+
+  def update_table(self):
+    # Retrieve Phone Records
+    records = database.retrieve_contacts()
+
+    # Populate Records in Treeview Widget'
+    x = 0
+    for row in records:
+      if x < self.count:
+        x += 1
+      else:
+        self.tree.insert(parent='',index='end',iid=x,text='',values=(row['name'],row['phone_number'],row['relationship']))
+        self.count += 1
+    self.tree.grid()
+
+
+
+
 
 ############################# Python Code #######################
 
